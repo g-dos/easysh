@@ -4,6 +4,8 @@
 
 Type what you mean. easysh translates it into real commands — and always shows you what it ran.
 
+![easysh demo](demo/demo.gif)
+
 ```
 easysh ~/project ❯ create app
 → mkdir -p app
