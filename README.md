@@ -4,6 +4,8 @@
 
 Type what you mean. easysh translates it into real commands — and always shows you what it ran.
 
+![easysh demo](demo/demo.gif)
+
 ```
 easysh ~/project ❯ create app
 → mkdir -p app
@@ -38,7 +40,12 @@ easysh sits on top of your shell and lets you speak plainly. It shows you the re
 - **Always transparent** — always prints the real command before running it
 - **Real shell fallback** — unknown commands run natively (`docker`, `make`, `python`, anything)
 - **Safe by default** — destructive commands require confirmation
-- **Suggests alternatives** — if a command fails, shows related hints
+- **Suggests alternatives** — shows hints before running an unrecognized command
+- **Tab completion** — complete commands and file paths with Tab
+- **Persistent history** — arrow keys across sessions (`~/.easysh_history`)
+- **Git branch in prompt** — `easysh ~/project (main) ❯`
+- **Learn mode** — explains every command as it runs (`mode learn`)
+- **Preview mode** — see what would run without executing (`mode preview`)
 - **No config, no setup** — works immediately after install
 
 ---
@@ -225,15 +232,28 @@ Open an issue before large changes. Keep it simple.
 
 ## Changelog
 
+### v0.5.0
+- Persistent history across sessions (`~/.easysh_history`)
+- Tab completion for commands and file paths
+- Git branch shown in prompt
+- `back` command to return to previous directory
+- `version` command
+- `mode preview` — translate without executing
+- New filesystem commands: `newest`, `biggest`, `tree`, `hidden`, `empty`, `permissions`
+- 72 automated tests
+
+### v0.4.0
+- Onboarding on first run
+- Suggestion engine (shows hints before execution)
+- Compound command explanations in learn mode
+- Visual polish
+
 ### v0.3.0
 - Refactored commands into separate modules (`filesystem`, `git`, `npm`, `system`)
-- Added suggestions when a command fails with "not found"
 - Improved error messages with usage hints
-- Added `.gitignore`
 
 ### v0.2.0
 - Expanded to ~60 translations across git, npm, filesystem, and system
-- Added `save`, `push`, `pull`, `dev`, `build`, `ports`, `disk`, and more
 
 ### v0.1.0
 - Initial release — interactive shell with basic filesystem commands
