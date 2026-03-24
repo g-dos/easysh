@@ -1,3 +1,3 @@
-from .router import suggest, translate
+from .router import translate
 
-__all__ = ["translate", "suggest"]
+__all__ = ["translate"]
