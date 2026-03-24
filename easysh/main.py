@@ -12,7 +12,7 @@ from .commands import translate
 from .executor import execute
 from .utils import confirm, format_path, print_green, print_red
 
-DESTRUCTIVE_PREFIXES = ("rm ",)
+DESTRUCTIVE_PREFIXES = ("rm ", "git checkout -- .", "git reset --hard")
 
 
 def is_destructive(cmd: str) -> bool:
