@@ -10,6 +10,7 @@ except ImportError:
 
 from .commands import suggest, translate
 from .executor import execute
+from .explain import explain
 from .utils import confirm, format_path, print_dim, print_green, print_red
 
 _DESTRUCTIVE = ("rm ", "git checkout -- .", "git reset --hard")
@@ -23,8 +24,12 @@ def get_prompt() -> str:
     return f"easysh {format_path(os.getcwd())} \u276f "
 
 
+_VALID_MODES = ("normal", "learn")
+
+
 def main() -> None:
     session = PromptSession(history=InMemoryHistory())
+    mode = "normal"
 
     while True:
         try:
@@ -45,6 +50,16 @@ def main() -> None:
             print("bye.")
             break
 
+        # Mode switching — handled before translation
+        if user_input.lower().startswith("mode "):
+            requested = user_input.split(None, 1)[1].lower()
+            if requested in _VALID_MODES:
+                mode = requested
+                print_green(f"\u2714 {mode} mode enabled")
+            else:
+                print_red(f"unknown mode '{requested}' — valid modes: {', '.join(_VALID_MODES)}")
+            continue
+
         translated = translate(user_input)
 
         # Show clean error for bad usage (missing args, etc.)
@@ -59,6 +74,11 @@ def main() -> None:
         if is_destructive(cmd):
             if not confirm("this may be destructive. continue? (y/n): "):
                 continue
+
+        if mode == "learn":
+            description = explain(cmd)
+            if description:
+                print_dim(description)
 
         returncode = execute(cmd)
 
