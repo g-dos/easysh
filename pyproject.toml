@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "easysh"
-version = "0.4.0"
+version = "0.5.0"
 description = "Human-friendly interactive shell"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = ["prompt_toolkit"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
 
 [project.scripts]
 easysh = "easysh.main:main"

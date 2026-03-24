@@ -6,6 +6,7 @@ commands:
                move <a> <b>, copy <a> <b>, rename <a> <b>, size <path>
                count <file>, compress <path>, extract <file>
                touch <file>, allow <file>, link <src> <dst>
+               newest, biggest, tree, hidden, empty <dir>, permissions <file>
 
   git          status, diff, log, save, save <message>, push, pull, fetch
                branch, new branch <name>, switch <branch>, merge <branch>
@@ -17,7 +18,8 @@ commands:
   system       disk, memory, ports, processes, ip, uptime, whoami, env
                clear, history, run <cmd>, kill <name>
 
-  shell        mode learn / mode normal
+  shell        mode learn / mode normal / mode preview
+               version, back
                help
                exit / quit
 

@@ -1,4 +1,17 @@
 import os
+import subprocess
+
+
+def git_branch() -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            capture_output=True, text=True, timeout=0.5
+        )
+        branch = result.stdout.strip()
+        return branch if result.returncode == 0 and branch != "HEAD" else None
+    except Exception:
+        return None
 
 
 def format_path(path: str) -> str:

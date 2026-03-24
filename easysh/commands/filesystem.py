@@ -101,4 +101,27 @@ def translate(tokens: list, raw: list, lower: str) -> Optional[str]:
         f = raw[1]
         return f"unzip {f}" if f.endswith(".zip") else f"tar -xzf {f}"
 
+    if lower == "newest":
+        return "ls -t | head -1"
+
+    if lower == "biggest":
+        return "du -sh * | sort -rh | head -5"
+
+    if tokens[0] == "empty":
+        if len(tokens) < 2:
+            return "__error__: missing directory — usage: empty <dir>"
+        d = raw[1]
+        return f"mkdir -p {d} && touch {d}/.gitkeep"
+
+    if lower == "tree":
+        return "find . -maxdepth 2 | sort"
+
+    if lower == "hidden":
+        return 'ls -la | grep "^\\."'
+
+    if tokens[0] == "permissions":
+        if len(tokens) < 2:
+            return "__error__: missing filename — usage: permissions <file>"
+        return f"ls -la {raw[1]}"
+
     return None
