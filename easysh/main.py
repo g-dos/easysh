@@ -1,4 +1,5 @@
 import os
+import shutil
 import sys
 
 try:
@@ -14,7 +15,7 @@ from .executor import execute
 from .explain import explain
 from .help import show_help
 from .suggest import suggest
-from .utils import confirm, format_path, print_dim, print_green, print_info, print_red
+from .utils import confirm, format_path, print_dim, print_green, print_info, print_red, success_message
 
 _DESTRUCTIVE = ("rm ", "git checkout -- .", "git reset --hard")
 _VALID_MODES = ("normal", "learn")
@@ -77,6 +78,17 @@ def main() -> None:
 
         cmd = translated if translated is not None else user_input
 
+        # Show suggestions before running if the command won't be found in PATH.
+        # Uses shutil.which so real tools (docker, make, python…) are never interrupted.
+        if translated is None:
+            first_word = user_input.strip().split()[0]
+            if shutil.which(first_word) is None:
+                hints = suggest(user_input)
+                print_dim("did you mean:")
+                for h in hints:
+                    print_dim(f"  {h}")
+                print()
+
         print_green(f"\u2192 {cmd}")
 
         if mode == "learn":
@@ -90,14 +102,7 @@ def main() -> None:
         returncode = execute(cmd)
 
         if returncode == 0 and not cmd.startswith("cd "):
-            print_green("\u2714 done")
-
-        # Suggestions only when native shell couldn't find the command
-        if translated is None and returncode == 127:
-            hints = suggest(user_input)
-            print_dim("\ndid you mean:")
-            for h in hints:
-                print_dim(f"  {h}")
+            print_green(f"\u2714 {success_message(cmd)}")
 
 
 if __name__ == "__main__":
