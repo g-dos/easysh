@@ -17,7 +17,11 @@ def print_blue(text: str) -> None:
 
 
 def print_red(text: str) -> None:
-    print(f"\033[31m{text}\033[0m")
+    print(f"\033[31m\u2716 {text}\033[0m")
+
+
+def print_dim(text: str) -> None:
+    print(f"\033[2m{text}\033[0m")
 
 
 def confirm(prompt: str) -> bool:
