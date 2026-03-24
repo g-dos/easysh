@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "easysh"
+version = "0.1.0"
+description = "Human-friendly interactive shell"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["prompt_toolkit"]
+
+[project.scripts]
+easysh = "easysh.main:main"

@@ -8,9 +8,9 @@ except ImportError:
     print("error: prompt_toolkit is required. run: pip install prompt_toolkit")
     sys.exit(1)
 
-from commands import translate
-from executor import execute
-from utils import confirm, format_path, print_green, print_red
+from .commands import translate
+from .executor import execute
+from .utils import confirm, format_path, print_green, print_red
 
 DESTRUCTIVE_PREFIXES = ("rm ",)
 
