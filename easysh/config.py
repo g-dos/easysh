@@ -14,7 +14,8 @@ Type simple commands instead of memorizing shell syntax.
   save fix bug   → git add -A && git commit -m "fix bug"
   dev            → npm run dev
 
-Type 'mode learn' to see explanations as you go.
+Type 'mode learn' anytime to understand commands as you run them.
+Type 'help' for the full command list.
 Type 'exit' to quit.
 """
 
