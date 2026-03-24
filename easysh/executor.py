@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from utils import print_blue, print_red
+from .utils import print_blue, print_red
 
 
 def execute(cmd: str) -> None:
