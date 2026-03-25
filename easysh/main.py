@@ -12,6 +12,7 @@ from .commands import translate
 from .config import is_first_run, show_onboarding
 from .executor import execute
 from .explain import explain
+from .help import show_help
 from .suggest import suggest
 from .utils import confirm, format_path, print_dim, print_green, print_info, print_red
 
@@ -52,6 +53,10 @@ def main() -> None:
         if user_input.lower() in ("exit", "quit"):
             print("bye.")
             break
+
+        if user_input.lower() == "help":
+            show_help()
+            continue
 
         # Mode switching — handled before translation
         if user_input.lower().startswith("mode "):
