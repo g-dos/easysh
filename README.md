@@ -1,12 +1,47 @@
 # easysh
 
-A human-friendly interactive shell that translates simple words into real shell commands, with safe execution and seamless fallback to native commands.
+**A human-friendly shell.**
 
-## Philosophy
+Type what you mean. easysh translates it into real commands — and always shows you what it ran.
 
-> Don't replace the terminal. Make it easier to use.
+```
+easysh ~/project ❯ create app
+→ mkdir -p app
 
-easysh always shows you the real command it runs. So you learn while you work.
+easysh ~/project ❯ save fix auth bug
+→ git add -A && git commit -m "fix auth bug"
+
+easysh ~/project ❯ search TODO in src
+→ grep -r "TODO" src
+
+easysh ~/project ❯ dev
+→ npm run dev
+```
+
+---
+
+## Why easysh?
+
+You open a terminal to get something done.
+
+Instead, you spend 30 seconds trying to remember if it's `ls -la` or `ls -al`. You google "how to find a file linux". You type `git add . && git commit -m` and forget the closing quote. Again.
+
+The terminal is powerful. But it wasn't designed to be friendly.
+
+easysh sits on top of your shell and lets you speak plainly. It shows you the real command every time — so you actually learn, instead of just copying and pasting forever.
+
+---
+
+## Features
+
+- **Natural language** — type `list`, `create`, `push`, `dev`
+- **Always transparent** — always prints the real command before running it
+- **Real shell fallback** — unknown commands run natively (`docker`, `make`, `python`, anything)
+- **Safe by default** — destructive commands require confirmation
+- **Suggests alternatives** — if a command fails, shows related hints
+- **No config, no setup** — works immediately after install
+
+---
 
 ## Installation
 
@@ -15,128 +50,191 @@ brew tap g-dos/easysh
 brew install easysh
 ```
 
+Then just run:
+
+```bash
+easysh
+```
+
+---
+
 ## Usage
 
 ```
-easysh ~/projects ❯ list
+easysh ~/project ❯ list
 → ls
 
-easysh ~/projects ❯ save fix login bug
-→ git add -A && git commit -m "fix login bug"
+easysh ~/project ❯ list all
+→ ls -la
 
-easysh ~/projects ❯ dev
+easysh ~/project ❯ open src
+→ cd src
+
+easysh ~/src ❯ create utils
+→ mkdir -p utils
+
+easysh ~/src ❯ show config.json
+→ cat config.json
+
+easysh ~/src ❯ search api_key in src
+→ grep -r "api_key" src
+
+easysh ~/src ❯ status
+→ git status
+
+easysh ~/src ❯ save refactor auth module
+→ git add -A && git commit -m "refactor auth module"
+
+easysh ~/src ❯ new branch feature/login
+→ git checkout -b feature/login
+
+easysh ~/src ❯ dev
 → npm run dev
 
-easysh ~/projects ❯ search TODO in src
-→ grep -r "TODO" src
+easysh ~/src ❯ add lodash
+→ npm install lodash
 
-easysh ~/projects ❯ delete temp.txt
-→ rm temp.txt
-(asks for confirmation)
+easysh ~/src ❯ docker ps
+→ docker ps        (native passthrough)
 
-easysh ~/projects ❯ git log --all
-→ git log --all
-(passes through directly)
+easysh ~/src ❯ exit
+bye.
 ```
 
-## Features
+Arrow keys for history. Ctrl+C to cancel. Ctrl+D or `exit` to quit.
 
-- Human-readable command translation (filesystem, git, npm, system)
-- Always shows the real command being run — learn while you work
-- Safe execution: confirmation required for destructive commands
-- Native fallback: unknown commands run as-is
-- Arrow key history (up/down)
-- Ctrl+C is safe (does not exit)
-- Ctrl+D or `exit` / `quit` to leave
+---
+
+## Philosophy
+
+> Don't replace the terminal. Make it easier to use.
+
+easysh is not a new shell. It's a friendly layer over the one you already have. Every command it runs is visible, copy-pasteable, and learnable.
+
+The goal is that after a few weeks, you don't need easysh anymore — because you've learned the real commands. That's a feature, not a bug.
+
+---
 
 ## Command Reference
 
 ### Filesystem
 
-| You type              | Runs                        |
-|-----------------------|-----------------------------|
-| `list`                | `ls`                        |
-| `list all`            | `ls -la`                    |
-| `where`               | `pwd`                       |
-| `open <dir>`          | `cd <dir>`                  |
-| `create <name>`       | `mkdir -p <name>`           |
-| `delete <file>`       | `rm <file>` ⚠️              |
-| `move <a> <b>`        | `mv <a> <b>`                |
-| `rename <a> <b>`      | `mv <a> <b>`                |
-| `copy <a> <b>`        | `cp -r <a> <b>`             |
-| `show <file>`         | `cat <file>`                |
-| `edit <file>`         | `nano <file>`               |
-| `touch <file>`        | `touch <file>`              |
-| `find <name>`         | `find . -name "<name>"`     |
-| `search <pattern>`    | `grep -r "<pattern>" .`     |
-| `search <p> in <dir>` | `grep -r "<p>" <dir>`       |
-| `count <file>`        | `wc -l <file>`              |
-| `size <path>`         | `du -sh <path>`             |
-| `compress <path>`     | `tar -czf <path>.tar.gz`    |
-| `extract <file>`      | `tar -xzf <file>`           |
-| `allow <file>`        | `chmod +x <file>`           |
-| `link <src> <dst>`    | `ln -s <src> <dst>`         |
+| Type | Runs |
+|------|------|
+| `list` | `ls` |
+| `list all` | `ls -la` |
+| `where` | `pwd` |
+| `open <dir>` | `cd <dir>` |
+| `create <name>` | `mkdir -p <name>` |
+| `delete <file>` ⚠ | `rm <file>` |
+| `move <a> <b>` | `mv <a> <b>` |
+| `rename <a> <b>` | `mv <a> <b>` |
+| `copy <a> <b>` | `cp -r <a> <b>` |
+| `show <file>` | `cat <file>` |
+| `edit <file>` | `nano <file>` |
+| `find <name>` | `find . -name "<name>"` |
+| `search <p>` | `grep -r "<p>" .` |
+| `search <p> in <dir>` | `grep -r "<p>" <dir>` |
+| `size <path>` | `du -sh <path>` |
+| `count <file>` | `wc -l <file>` |
+| `compress <path>` | `tar -czf <path>.tar.gz <path>` |
+| `extract <file>` | `tar -xzf <file>` |
+| `allow <file>` | `chmod +x <file>` |
+| `link <src> <dst>` | `ln -s <src> <dst>` |
 
 ### System
 
-| You type    | Runs                              |
-|-------------|-----------------------------------|
-| `clear`     | `clear`                           |
-| `history`   | `history`                         |
-| `disk`      | `df -h`                           |
-| `memory`    | `vm_stat`                         |
-| `processes` | `ps aux`                          |
-| `ports`     | `lsof -iTCP -sTCP:LISTEN -P -n`   |
-| `ip`        | `curl -s ifconfig.me`             |
-| `uptime`    | `uptime`                          |
-| `whoami`    | `whoami`                          |
-| `env`       | `env`                             |
-| `run <cmd>` | `<cmd>`                           |
-| `kill <p>`  | `pkill -f <p>`                    |
+| Type | Runs |
+|------|------|
+| `disk` | `df -h` |
+| `memory` | `vm_stat` |
+| `processes` | `ps aux` |
+| `ports` | `lsof -iTCP -sTCP:LISTEN -P -n` |
+| `ip` | `curl -s ifconfig.me` |
+| `uptime` | `uptime` |
+| `clear` | `clear` |
+| `history` | `history` |
+| `kill <name>` | `pkill -f <name>` |
+| `run <cmd>` | `<cmd>` |
 
 ### Git
 
-| You type            | Runs                              |
-|---------------------|-----------------------------------|
-| `status`            | `git status`                      |
-| `diff`              | `git diff`                        |
-| `log`               | `git log --oneline -10`           |
-| `save`              | `git add -A && git commit -m "update"` |
-| `save <message>`    | `git add -A && git commit -m "<message>"` |
-| `push`              | `git push`                        |
-| `pull`              | `git pull`                        |
-| `fetch`             | `git fetch`                       |
-| `branch`            | `git branch`                      |
-| `new branch <name>` | `git checkout -b <name>`          |
-| `switch <branch>`   | `git checkout <branch>`           |
-| `merge <branch>`    | `git merge <branch>`              |
-| `stash`             | `git stash`                       |
-| `pop`               | `git stash pop`                   |
-| `undo`              | `git reset HEAD~1 --soft`         |
-| `discard`           | `git checkout -- .` ⚠️            |
-| `clone <url>`       | `git clone <url>`                 |
-| `init`              | `git init`                        |
-| `remote`            | `git remote -v`                   |
-| `tag <version>`     | `git tag <version>`               |
-| `git ...`           | `git ...` (passthrough)           |
+| Type | Runs |
+|------|------|
+| `status` | `git status` |
+| `diff` | `git diff` |
+| `log` | `git log --oneline -10` |
+| `save` | `git add -A && git commit -m "update"` |
+| `save <message>` | `git add -A && git commit -m "<message>"` |
+| `push` | `git push` |
+| `pull` | `git pull` |
+| `fetch` | `git fetch` |
+| `branch` | `git branch` |
+| `new branch <name>` | `git checkout -b <name>` |
+| `switch <branch>` | `git checkout <branch>` |
+| `merge <branch>` | `git merge <branch>` |
+| `stash` | `git stash` |
+| `pop` | `git stash pop` |
+| `undo` | `git reset HEAD~1 --soft` |
+| `discard` ⚠ | `git checkout -- .` |
+| `clone <url>` | `git clone <url>` |
+| `init` | `git init` |
+| `remote` | `git remote -v` |
+| `tag <version>` | `git tag <version>` |
+| `git ...` | passthrough |
 
 ### NPM
 
-| You type          | Runs                  |
-|-------------------|-----------------------|
-| `dev`             | `npm run dev`         |
-| `build`           | `npm run build`       |
-| `start`           | `npm start`           |
-| `test`            | `npm test`            |
-| `lint`            | `npm run lint`        |
-| `install`         | `npm install`         |
-| `add <pkg>`       | `npm install <pkg>`   |
-| `add dev <pkg>`   | `npm install -D <pkg>`|
+| Type | Runs |
+|------|------|
+| `dev` | `npm run dev` |
+| `build` | `npm run build` |
+| `start` | `npm start` |
+| `test` | `npm test` |
+| `lint` | `npm run lint` |
+| `install` | `npm install` |
+| `add <pkg>` | `npm install <pkg>` |
+| `add dev <pkg>` | `npm install -D <pkg>` |
 | `uninstall <pkg>` | `npm uninstall <pkg>` |
-| `packages`        | `npm list --depth=0`  |
-| `scripts`         | `npm run`             |
-| `outdated`        | `npm outdated`        |
-| `audit`           | `npm audit`           |
-| `npm ...`         | `npm ...` (passthrough)|
+| `packages` | `npm list --depth=0` |
+| `scripts` | `npm run` |
+| `outdated` | `npm outdated` |
+| `audit` | `npm audit` |
+| `npm ...` | passthrough |
 
-⚠️ = requires confirmation before execution
+⚠ requires confirmation
+
+---
+
+## Contributing
+
+easysh is intentionally small. Contributions that add commands, fix bugs, or improve UX are welcome.
+
+```bash
+git clone https://github.com/g-dos/easysh
+cd easysh
+pip install -e ".[dev]"
+python -m easysh.main
+```
+
+Adding a command is as simple as adding a rule to one of the modules in `easysh/commands/`. Each module is ~50 lines and self-contained.
+
+Open an issue before large changes. Keep it simple.
+
+---
+
+## Changelog
+
+### v0.3.0
+- Refactored commands into separate modules (`filesystem`, `git`, `npm`, `system`)
+- Added suggestions when a command fails with "not found"
+- Improved error messages with usage hints
+- Added `.gitignore`
+
+### v0.2.0
+- Expanded to ~60 translations across git, npm, filesystem, and system
+- Added `save`, `push`, `pull`, `dev`, `build`, `ports`, `disk`, and more
+
+### v0.1.0
+- Initial release — interactive shell with basic filesystem commands
+- Homebrew tap via `g-dos/easysh`
