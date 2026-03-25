@@ -24,6 +24,10 @@ def print_dim(text: str) -> None:
     print(f"\033[2m{text}\033[0m")
 
 
+def print_info(text: str) -> None:
+    print(f"\033[2m\u2139 {text}\033[0m")
+
+
 def confirm(prompt: str) -> bool:
     try:
         answer = input(prompt).strip().lower()

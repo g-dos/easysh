@@ -8,12 +8,15 @@ except ImportError:
     print("error: prompt_toolkit is required. run: pip install prompt_toolkit")
     sys.exit(1)
 
-from .commands import suggest, translate
+from .commands import translate
+from .config import is_first_run, show_onboarding
 from .executor import execute
 from .explain import explain
-from .utils import confirm, format_path, print_dim, print_green, print_red
+from .suggest import suggest
+from .utils import confirm, format_path, print_dim, print_green, print_info, print_red
 
 _DESTRUCTIVE = ("rm ", "git checkout -- .", "git reset --hard")
+_VALID_MODES = ("normal", "learn")
 
 
 def is_destructive(cmd: str) -> bool:
@@ -24,10 +27,10 @@ def get_prompt() -> str:
     return f"easysh {format_path(os.getcwd())} \u276f "
 
 
-_VALID_MODES = ("normal", "learn")
-
-
 def main() -> None:
+    if is_first_run():
+        show_onboarding()
+
     session = PromptSession(history=InMemoryHistory())
     mode = "normal"
 
@@ -57,7 +60,7 @@ def main() -> None:
                 mode = requested
                 print_green(f"\u2714 {mode} mode enabled")
             else:
-                print_red(f"unknown mode '{requested}' — valid modes: {', '.join(_VALID_MODES)}")
+                print_red(f"unknown mode '{requested}' — valid: {', '.join(_VALID_MODES)}")
             continue
 
         translated = translate(user_input)
@@ -71,19 +74,20 @@ def main() -> None:
 
         print_green(f"\u2192 {cmd}")
 
+        if mode == "learn":
+            for desc in explain(cmd):
+                print_info(desc)
+
         if is_destructive(cmd):
             if not confirm("this may be destructive. continue? (y/n): "):
                 continue
 
-        if mode == "learn":
-            description = explain(cmd)
-            if description:
-                print_dim(description)
-
         returncode = execute(cmd)
 
-        # Show suggestions only when the command wasn't recognized by easysh
-        # and the native shell also failed to find it (exit 127 = not found)
+        if returncode == 0 and not cmd.startswith("cd "):
+            print_green("\u2714 done")
+
+        # Suggestions only when native shell couldn't find the command
         if translated is None and returncode == 127:
             hints = suggest(user_input)
             print_dim("\ndid you mean:")
